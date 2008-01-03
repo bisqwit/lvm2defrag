@@ -1,0 +1,57 @@
+PLANNED ALGORITHM
+
+MAIN(VG):
+  For each Obj in the VG,
+    Optimize(Obj)
+OPTIMIZE(Obj):
+  If Obj is in wrong location, TRYMOVE(Obj, goal location)
+TRYMOVE(Obj, Location)
+  While Something exists within Location,
+    MOVEAWAY(Something, Location)
+MOVEAWAY(Offender, ButNotHere):
+  If Offender's goal location is free,
+    MOVETO(Offender, goal location)
+  Else
+    <Find smallest Hole that is large enough for Offender, ButNotHere>
+    If Hole was found,
+      MOVETO(Offender, End of Hole)
+    Else
+      <Find largest Hole, ButNotHere>
+      SPLIT_TWO(Offender, Size of Hole and The Rest,
+                          Preferring the part occupying ButNotHere)
+      MOVETO(Hole-sized part, Hole)
+    EndIf
+  EndIf
+
+
+ACTUAL ALGORITHM
+
+MAIN(VG):
+  For each Obj in the VG,
+    If Obj is not at Goal:
+      If Goal is unoccupied:
+        SCHEDULE_MOVETO(Obj, Goal)
+  If Schedule is not empty:
+    Do all scheduled moves
+    Clear schedule
+    Restart MAIN
+  For each Obj in the VG,
+    If Obj is not at Goal:
+      For each Occupant at Goal:
+        <Find smallest Hole that is large enough for Occupant, but not at Goal>
+        If Hole was found:
+          SCHEDULE_MOVETO(Occupant, End of Hole)
+          Restart MAIN
+      For each Occupant at Goal:
+        <Find largest Hole, but not at Goal>
+        SPLIT_TWO(Occupant, Size of Hole, Goal)
+        Restart MAIN
+
+SPLIT_TWO(Obj, Size, Location):
+  Splits Obj into two Objs, the other being Size sized
+  and the other being the rest.
+  
+  Whether the first one or the second one will be Size
+  sized, is decided by comparing which one of the ways
+  would result in one of the objects still completely
+  occupying Location.

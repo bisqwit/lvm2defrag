@@ -1,0 +1,54 @@
+!! owner
+
+! /dev/sdb1
+3000	rootfsB-1
+1	rootfsB-2
+(7668)	-
+3411	rootfsA-4
+(25)	-
+5120	rootfsA-5
+(5974)	-
+854	swapA-1
+9387	opsysA-1
+15360	accesslogA-1
+4370	storageB-1
+10669	storageB-2
+1	storageB-3
+8975	storageB-4
+3292	storageB-5
+(3000)	-
+854	swapC-1
+4370	storageC-1
+8975	storageC-4
+(81)	-
+
+! /dev/sdc1
+(3000)	-
+1	rootfsA-2
+7668	rootfsB-3
+3411	rootfsB-4
+5120	rootfsB-5
+854	swapB-1
+25	chiiboot-vmA-1
+10669	storageC-2
+1	storageC-3
+(9811)	-
+7668	rootfsA-3
+4370	storageA-1
+10669	storageA-2
+(1)	-
+8975	storageA-4
+3292	storageA-5
+3000	rootfsA-1
+(4584)	-
+1	storageA-3
+(4802)	-
+3292	storageC-5
+(4173)	-
+
+! /dev/sda2
+(9387)	-
+9387	opsysB-1
+9387	opsysC-1
+(19484)	-
+
