@@ -33,8 +33,16 @@ foreach($data as $vgname => $value)
           $seg = (int)substr($datakey, 7);
         
           $nparts = 1; $partkey = 'parts';
-          if($datavalues['type'] == 'mirror')  { $nparts = $datavalues['mirror_count']; $partkey = 'mirrors'; }
-          if($datavalues['type'] == 'striped') { $nparts = $datavalues['stripe_count']; $partkey = 'stripes'; }
+          if($datavalues['type'] == 'mirror')
+          {
+            $nparts = $datavalues['mirror_count'];
+            $partkey = 'mirrors';
+          }
+          if($datavalues['type'] == 'striped')
+          {
+            $nparts = $datavalues['stripe_count'];
+            $partkey = 'stripes';
+          }
 
           $fpe    = $datavalues['start_extent'];
           $npe    = $datavalues['extent_count'] / $nparts;
@@ -54,11 +62,14 @@ foreach($data as $vgname => $value)
                     'pv'     => $pvname,
                     'pvoffs' => $pvoffs);
            
-            $vgtmp['pv'][$pvname]['uses'][$pvoffs] =
-              Array('count'  => $npe,
-                    'lv'     => $lvnamepart,
-                  // 'lvoffs' => $fpe
-                  );
+            if($partkey != 'mirrors')
+            {
+              $vgtmp['pv'][$pvname]['uses'][$pvoffs] =
+                Array('count'  => $npe,
+                      'lv'     => $lvnamepart,
+                    // 'lvoffs' => $fpe
+                    );
+            }
             unset($lvpart);
           }
         }
