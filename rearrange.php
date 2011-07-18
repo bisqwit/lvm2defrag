@@ -333,7 +333,7 @@ class VG
       foreach($contents as $loc)
       {
         if($loc->offset > $o) $res[] = new Location($pv->name, $o, $loc->offset - $o);
-        $o = $loc->offset + $loc->size;
+        $o = max($o, $loc->offset + $loc->size);
       }
       if($pv->size > $o) $res[] = new Location($pv->name, $o, $pv->size - $o);
     }
@@ -540,23 +540,23 @@ $vgs = Array();
 
 unset($vg); unset($pv); unset($pv_ofs);
 $vg = false; $pv = false; $pv_ofs = 0;
-foreach(split("\r?\n",file_get_contents('dump.txt')) as $line)
+foreach(preg_split("/\r?\n/",file_get_contents('dump.txt')) as $line)
 {
-  if(ereg('^!! ', $line))
+  if(preg_match('/^!! /', $line))
   {
     $vg = &$vgs[substr($line,3)];
     if(!$vg) $vg = new VG(substr($line,3));
   }
-  elseif(ereg('^! ', $line))
+  elseif(preg_match('/^! /', $line))
   {
     $pvname = substr($line,2);
     $pv = &$vg->pvs[$pvname];
     if(!$pv) $pv = new PV($pvname);
     $pv_ofs = 0;
   }
-  elseif(ereg('^[(0-9]', $line))
+  elseif(preg_match('/^[(0-9]/', $line))
   {
-    $tokens = split("[\t ]+", $line);
+    $tokens = preg_split("/[\t ]+/", $line);
     if($tokens[0][0] == '(')
       $pv_ofs += (int)substr($tokens[0], 1);
     else
@@ -576,14 +576,14 @@ unset($vg); unset($pv); unset($lv); unset($pv_ofs);
 
 $vg = false; $pv = false; $pv_ofs = 0;
 $pvsize2 = Array();
-foreach(split("\r?\n",file_get_contents('rearrange.txt')) as $line)
+foreach(preg_split("/\r?\n/",file_get_contents('rearrange.txt')) as $line)
 {
-  if(ereg('^!! ', $line))
+  if(preg_match('/^!! /', $line))
   {
     $vg = &$vgs[substr($line,3)];
     if(!$vg) $vg = new VG(substr($line,3));
   }
-  elseif(ereg('^! ', $line))
+  elseif(preg_match('/^! /', $line))
   {
     $pvname = substr($line,2);
     $pv = &$vg->pvs[$pvname];
@@ -594,9 +594,9 @@ foreach(split("\r?\n",file_get_contents('rearrange.txt')) as $line)
     }
     $pv_ofs = 0;
   }
-  elseif(ereg('^[(0-9]', $line))
+  elseif(preg_match('/^[(0-9]/', $line))
   {
-    $tokens = split("[\t ]+", $line);
+    $tokens = preg_split("/[\t ]+/", $line);
     if($tokens[0][0] == '(')
       $pv_ofs += (int)substr($tokens[0], 1);
     else

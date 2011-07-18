@@ -9,7 +9,7 @@ function ParseVSN1Tokens($tokens, &$pos)
   while($pos < $end)
   {
     if($tokens[$pos][0] == '"') return stripslashes(substr($tokens[$pos++], 1, -1));
-    if(ereg('^[0-9]', $tokens[$pos])) return (int)$tokens[$pos++];
+    if(preg_match('/^[0-9]/', $tokens[$pos])) return (int)$tokens[$pos++];
     if($tokens[$pos] == '{') { ++$pos; continue; }
     if($tokens[$pos] == '}') { ++$pos; break; }
     if($tokens[$pos] == '[')
