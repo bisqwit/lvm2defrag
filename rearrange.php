@@ -333,7 +333,7 @@ class VG
       foreach($contents as $loc)
       {
         if($loc->offset > $o) $res[] = new Location($pv->name, $o, $loc->offset - $o);
-        $o = $loc->offset + $loc->size;
+        $o = max($o, $loc->offset + $loc->size);
       }
       if($pv->size > $o) $res[] = new Location($pv->name, $o, $pv->size - $o);
     }
