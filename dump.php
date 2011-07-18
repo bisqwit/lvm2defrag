@@ -28,7 +28,7 @@ foreach($data as $vgname => $value)
       #$vgtmp['lv'][$lvname] = &$lvtmp;
       foreach($lvdata as $datakey => $datavalues)
       {
-        if(ereg('^segment[0-9]', $datakey))
+        if(preg_match('/^segment[0-9]/', $datakey))
         {
           $seg = (int)substr($datakey, 7);
         
