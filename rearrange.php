@@ -574,6 +574,8 @@ foreach(preg_split("/\r?\n/",file_get_contents('dump.txt')) as $line)
 }
 unset($vg); unset($pv); unset($lv); unset($pv_ofs);
 
+$failures = 0;
+
 $vg = false; $pv = false; $pv_ofs = 0;
 $pvsize2 = Array();
 foreach(preg_split("/\r?\n/",file_get_contents('rearrange.txt')) as $line)
@@ -591,6 +593,7 @@ foreach(preg_split("/\r?\n/",file_get_contents('rearrange.txt')) as $line)
     {
       $pv = new PV($pvname);
       print "ERROR: Volume {$pvname} was not mentioned in current, is in goal\n";
+      $failures += 1;
     }
     $pv_ofs = 0;
   }
@@ -608,6 +611,7 @@ foreach(preg_split("/\r?\n/",file_get_contents('rearrange.txt')) as $line)
         $lv = new Obj($lvname, (int)$tokens[0]);
         print "ERROR: Object {$lvname} was not mentioned in current, is in goal\n";
         print "       I won't create volumes, you do that yourself\n";
+        $failures += 1;
       }
       $lv->goal_pv  = $pv->name;
       $lv->goal_ofs = $pv_ofs;
@@ -630,7 +634,14 @@ foreach($vgs as $vg)
     {
       print "ERROR: Object {$lvname} was not mentioned in goal, was in current\n";
       print "       I won't destroy volumes, you do that yourself\n";
+      $failures += 1;
     }
+}
+
+if($failures)
+{
+  print "Errors detected. Stop.\n";
+  return;
 }
 
 #print_r($vgs);
