@@ -2,6 +2,7 @@
 require_once 'read_vsn1.php';
 
 $data = parse_vsn1(file_get_contents('data.txt'));
+#print_r($data);
 
 $vg = Array();
 $pv = Array();
