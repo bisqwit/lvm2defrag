@@ -361,7 +361,7 @@ class VG
     
     print "# Moving {$lv->name} ($reason)\n";
     
-    print "echo "Moving {$lv->name} ($reason)\n";
+    print "echo Moving {$lv->name} ($reason)\n";
     print "pvmove --alloc anywhere $spv:$sbeg-$send $dpv:$dbeg-$dend\n";
     
     $this->pvs[$lv->cur_pv]->contents[$lv->cur_ofs] = &$lv;
