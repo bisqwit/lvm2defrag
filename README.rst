@@ -21,6 +21,18 @@ This software is currently written in PHP. The PHP commandline program is requir
 
 Here's how.
 
+Easy-mode
+^^^^^^^^^
+
+::
+  
+   # ./lvm2defrag.sh YOURVOLUMEGROUPNAME
+   # ./commands.sh
+
+Execute the following commands, Your favorite editor should open, move around your partitions between disks into the order you wish they to be in. Save and exit.
+You should now have commands.sh which contain all commands you need to process.
+If something goes wrong, you should probably prefer the manual methode.
+
 Step 1. Dump existing layout
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
