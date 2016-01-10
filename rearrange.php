@@ -361,13 +361,7 @@ class VG
     
     print "# Moving {$lv->name} ($reason)\n";
     
-    $interval = '';
-    if($dend - $dbeg <= 200) $interval = '-i10';
-    if($dend - $dbeg <= 50) $interval = '-i5';
-    if($dend - $dbeg <= 10) $interval = '-i2';
-    if($dend - $dbeg <= 1) $interval = '-i1';
-    
-    print "pvmove $interval --alloc anywhere $spv:$sbeg-$send $dpv:$dbeg-$dend\n";
+    print "pvmove --alloc anywhere $spv:$sbeg-$send $dpv:$dbeg-$dend\n";
     
     $this->pvs[$lv->cur_pv]->contents[$lv->cur_ofs] = &$lv;
   }
@@ -481,13 +475,7 @@ class VG
         unset($lvlist[$l]);
       }
       
-      $interval = '';
-      if($amount <= 200) $interval = '-i10';
-      if($amount <= 50) $interval = '-i5';
-      if($amount <= 10) $interval = '-i2';
-      if($amount <= 1) $interval = '-i1';
-
-      print "pvmove $interval --alloc anywhere {$spv}$slist {$dpv}$dlist\n";
+      print "pvmove --alloc anywhere {$spv}$slist {$dpv}$dlist\n";
     }
     #print "## End cluster\n";
   }
