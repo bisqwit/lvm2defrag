@@ -3,6 +3,7 @@
 
 $title = 'LVM2 defragmenter';
 $progname = 'lvm2defrag';
+$git = 'https://github.com/bisqwit/lvm2defrag.git';
 
 function usagetext($prog)
 {
@@ -19,10 +20,10 @@ LVM2 Defrag defragments or rearranges a LVM2 volume group using <tt>pvmove</tt>.
 ", '1. Copying' => "
 
 lvm2defrag has been written by
-<a href=\"http://iki.fi/bisqwit/\">Joel Yliluoma</a>
+<a href=\"https://iki.fi/bisqwit/\">Joel Yliluoma</a>
 and other contributors,<br>
 and is distributed under the terms of the
-<a href=\"http://www.gnu.org/licenses/gpl-3.0.html\">General Public License</a>
+<a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">General Public License</a>
 version 3 (GPL3).
 
 ", '1. Requirements' => "
