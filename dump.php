@@ -41,6 +41,12 @@ foreach($data as $vgname => $value)
             $nparts = $datavalues['mirror_count'];
             $partkey = 'mirrors';
           }
+          if($datavalues['type'] == 'raid1')
+          {
+            $nparts = $datavalues['device_count'];
+            $partkey = 'raids';
+            $nparts = 0;
+          }
           if($datavalues['type'] == 'striped')
           {
             $nparts = $datavalues['stripe_count'];
@@ -55,6 +61,23 @@ foreach($data as $vgname => $value)
 
           $fpe    = $datavalues['start_extent'];
           $npe    = $datavalues['extent_count'] / $nparts_div;
+
+          if($datavalues['type'] == 'thin-pool')
+          {
+            $nparts = 0;
+          }
+          if($datavalues['type'] == 'thin')
+          {
+            $nparts = 0;
+          }
+          if($datavalues['type'] == 'cache')
+          {
+            $nparts = 0;
+          }
+          if($datavalues['type'] == 'cache-pool')
+          {
+            $nparts = 0;
+          }
 
           for($n=0; $n < $nparts; ++$n)
           {
