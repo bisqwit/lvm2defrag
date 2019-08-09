@@ -94,6 +94,25 @@ function LvSizeCom($a,$b)
   return $a['size'] - $b['size'];
 }
 
+/**
+ * Format a size with a MB/GB/TB suffix.
+ *
+ * @param $val int Size in MB
+ *
+ * @return string
+ */
+function layoutSize($val) {
+  if ($val > 1024*1024)  {
+    return sprintf("%1.1f TB", $val/1024/1024);
+  }
+  if ($val > 1024) {
+    return sprintf("%1.1f GB", $val/1024);
+  }
+
+  return $val." MB";
+}
+
+
 class VG
 {
   public $name; // Name of the volume group
@@ -468,9 +487,10 @@ class VG
         $dbeg = $lv->cur_ofs;
         $dend = $lv->cur_ofs + $lv->size - 1;
         $amount += $dend - $dbeg + 1;
+        $lv->size_mb = layoutSize($lv->size * 4);
         
-        print "# Moving {$lv->name} ({$lv->size}) ({$lv->move_reason})\n";
-        print "echo 'Moving {$lv->name} ({$lv->size}) ({$lv->move_reason})'\n";
+        print "# Moving {$lv->name} ({$lv->size} extends / {$lv->size_mb}) ({$lv->move_reason})\n";
+        print "echo 'Moving {$lv->name} ({$lv->size} extends / {$lv->size_mb}) ({$lv->move_reason})'\n";
         $slist .= ":$sbeg-$send";
         $dlist .= ":$dbeg-$dend";
         
