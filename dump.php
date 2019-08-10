@@ -33,7 +33,9 @@ foreach($data as $vgname => $value)
         {
           $seg = (int)substr($datakey, 7);
         
-          $nparts = 1; $partkey = 'parts';
+          $nparts = 1;
+          $partkey = 'parts';
+          $nparts_div = 1;
           if($datavalues['type'] == 'mirror')
           {
             $nparts = $datavalues['mirror_count'];
@@ -42,11 +44,17 @@ foreach($data as $vgname => $value)
           if($datavalues['type'] == 'striped')
           {
             $nparts = $datavalues['stripe_count'];
+            $nparts_div = $nparts;
             $partkey = 'stripes';
+          }
+          if($datavalues['type'] == 'snapshot')
+          {
+            print "# SNAPSHOT VOLUME '{$datakey}' DETECTED AND IGNORED. PLEASE EXERCISE CAUTION.\n\n";
+            continue;
           }
 
           $fpe    = $datavalues['start_extent'];
-          $npe    = $datavalues['extent_count'] / $nparts;
+          $npe    = $datavalues['extent_count'] / $nparts_div;
 
           for($n=0; $n < $nparts; ++$n)
           {
@@ -63,8 +71,21 @@ foreach($data as $vgname => $value)
                     'pv'     => $pvname,
                     'pvoffs' => $pvoffs);
            
-            if($partkey != 'mirrors')
+            #if($partkey != 'mirrors')
             {
+              /*if(preg_match('/^pvmove/', $pvname))
+              {
+                print "# PVMOVE DETECTED IN PROGRESS; THIS FILE IS DEFUNCTIONAL.\n";
+                print "# WAIT UNTIL PVMOVE IS COMPLETED, THEN DO A NEW DUMP.\n";
+                print "\n";
+              }
+              else*/if($partkey == 'mirrors')
+              {
+                print "# MIRROR VOLUMES DETECTED. LVM2DEFRAG MAY NOT HANDLE\n";
+                print "# MIRROR VOLUMES PROPERLY. PLEASE EXERCISE CAUTION.\n";
+                print "\n";
+              }
+              
               $vgtmp['pv'][$pvname]['uses'][$pvoffs] =
                 Array('count'  => $npe,
                       'lv'     => $lvnamepart,
@@ -81,6 +102,9 @@ foreach($data as $vgname => $value)
     unset($vgtmp);
   }
 
+#print_r($pv);
+#print_r($vg);
+
 foreach($pv as &$pvdata)
   ksort($pvdata['uses']);
 unset($pvdata);
@@ -90,9 +114,22 @@ foreach($vg as $vgname => $vgdata)
   print "!! $vgname\n\n";
   foreach($vgdata['pv'] as $pvname => $pvdata)
   {
-    print "! {$pvdata['device']}\n";
-    $begin = 0;
-    $end   = $pvdata['npe'];
+    if(isset($pvdata['device']))
+    {
+      print "! {$pvdata['device']}\n";
+      $begin = 0;
+      $end   = $pvdata['npe'];
+    }
+    else
+    {
+      print "! *** $pvname ***\n";
+      $begin = 0;
+      $end   = 0;#$vgdata['lv'][$pvname]pvdata['count'];
+    }
+
+    if(empty($pvdata['uses']))
+      print "# Nothing is using it\n";
+
     foreach($pvdata['uses'] as $offset => $data)
     {
       if($offset > $begin)
